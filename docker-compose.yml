@@ -4,7 +4,7 @@ volumes:
     dados:
 
 networks:
-    banco:
+    banco:        
     web:
     fila:
 
@@ -16,7 +16,7 @@ services:
             - dados:/var/lib/postgresql/data
             # scripts
             - ./scripts:/scripts
-            - ./scripts/init.sql:/docker-entrypoint-initdb.d/init.sql   
+            - ./scripts/init.sql:/docker-entrypoint-initdb.d/init.sql
         networks: 
             - banco
     
@@ -36,12 +36,12 @@ services:
             - queue
 
     worker:
-        image: python:3.6
+        build: worker
         volumes:
             # Worker
             - ./worker:/worker
         working_dir: /worker
-        command: ./app.sh
+        command: worker.py
         networks:
             - fila
         depends_on:
